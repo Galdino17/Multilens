@@ -180,7 +180,7 @@ class Contas(db.Model):
         tipo_mensalidade = self.recorrencia.tipo_mensalidade
         quantidade = self.get_parcelas_pagas()
         if tipo_mensalidade == "Parcelado":
-            return (f"Parcela: {quantidade-1} de {len(self.parcelas_info)} - {self.fornecedor} : {self.descricao}.")
+            return (f"Parcela: {quantidade} de {len(self.parcelas_info)} - {self.fornecedor} : {self.descricao}.")
         elif tipo_mensalidade == "Compras":
             return (f"Compras feitas em {self.fornecedor} ")
         else:
@@ -490,7 +490,8 @@ class Contas_pagas(db.Model):
     
     def remove(self):
         financeiro = Financeiro.get_item(self.id, "Conta")
-        financeiro.remove()
+        if financeiro is not None:
+            financeiro.remove()
 
         db.session.delete(self)
         db.session.commit()
@@ -814,6 +815,7 @@ class Pedidos(db.Model):
     valor_entrega = db.Column("valor_entrega", db.Unicode)
     valor_desconto = db.Column("valor_desconto", db.Unicode)
     observacao = db.Column("observacao", db.Unicode)
+    feedback = db.Column("feedback", db.Unicode)
 
     cliente = db.relationship("Cliente", foreign_keys=id_cliente)
     pagamento = db.relationship("Pagamento", foreign_keys=tipo_pagamento)

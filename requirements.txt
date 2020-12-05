@@ -9,3 +9,4 @@ flask-migrate
 flask-restful
 gunicorn
 xlwt
+requests

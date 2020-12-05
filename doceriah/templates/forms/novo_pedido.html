@@ -138,7 +138,13 @@
                 <div class="control is-expanded">
                     <label class="label"> {{ form.observacao.label }} </label>              
                     <div class="control">
-                            {{ form.observacao(class="input", type="text", placeholder="Observações sobre esse pedido") }}
+                        {{ form.observacao( class="textarea", rows="5",placeholder="Campo de Observações") }}
+                    </div>
+                </div> 
+                <div class="control is-expanded">
+                    <label class="label"> {{ form.feedback.label }} </label>              
+                    <div class="control">
+                        {{ form.feedback( class="textarea", rows="5",placeholder="Campo para o FeedBack") }}
                     </div>
                 </div> 
             </div> 

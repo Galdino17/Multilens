@@ -151,7 +151,7 @@ def form_contas():
             
             if response["success"]:
                 flash(response["message"], "is-success")
-                return redirect(url_for("site.conta", conta=response['id']))
+                return redirect(url_for("site.contas"))
 
             else:
                 flash(response["message"], "is-danger")
@@ -225,6 +225,7 @@ def status_pagamento_conta(conta: int):
                     response["message"],
                     "is-success",
                 )
+                return redirect(url_for("site.pagamentos"))
                 
                 
             
@@ -238,6 +239,7 @@ def status_pagamento_conta(conta: int):
 
     return render_template("forms/contas_pagamentos.html", form=form)
 
+'''
 @bp.route("/contas/parcelas/<int:conta_id>", methods=["GET", "POST"])
 @login_required
 def parcelas(conta_id: int):
@@ -334,7 +336,7 @@ def parcelas(conta_id: int):
 
 
     return render_template("forms/parcelas.html", form=form, conta=conta_obj)
-
+'''
 
 @bp.route("/estoque", methods=["GET"])
 @login_required
@@ -572,7 +574,7 @@ def form_produto_saida():
                     response["message"],
                     "is-success",
                 )
-                return render_template("forms/saida.html", form=form, produtos=Produto.get_all())
+                return redirect(url_for("site.balance"))
                 
             
 
@@ -604,7 +606,7 @@ def form_produto_entrada():
                     response["message"],
                     "is-success",
                 )
-                return render_template("forms/entrada.html", form=form, produtos=Produto.get_all())
+                return redirect(url_for("site.balance"))
                 
             
 
@@ -848,7 +850,7 @@ def itens_pedido(pedido_id: int):
 
                 form.load(pedido_selecionado.pedidos_itens[0])
 
-                return redirect(url_for("site.status_pagamento_pedido", pedido_id=pedido_selecionado.id))
+                return redirect(url_for("site.cozinha"))
                 
             
 

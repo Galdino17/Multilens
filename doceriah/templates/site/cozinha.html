@@ -61,8 +61,9 @@
             <table class="table is-striped is-fullwidth is-hoverable"  id="tabela">
                 <thead>
                     <tr>
-                        <th width=30% style="text-align: center; background-color: rgb(215, 215, 215);">Pedido</th>
-                              <th style="text-align: center; background-color: rgb(215, 215, 215);">Descrição total do Pedido</th>
+                        <th width=20% style="text-align: center; background-color: rgb(215, 215, 215);">Pedido</th>
+                        <th width=30% style="text-align: center; background-color: rgb(215, 215, 215);">Descrição total do Pedido</th>
+                        <th style="text-align: center; background-color: rgb(215, 215, 215);">Observação</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,14 +73,18 @@
                                     <b>{{pedido.cliente.name}}</b>
                                 <p> <b>Produção:</b> {{pedido.get_data_producao()}} às {{ pedido.hora_producao}}
                                 <p> <b>Telefone:</b> {{pedido.cliente.get_telefone_encrypted()}}
+                                    
                             </td>
 
                             
-                            <td td style="vertical-align: middle; text-align: justify">
+                            <td td style="vertical-align: middle; text-align: center">
                                 {% for item in pedido.pedidos_itens %}
                                     <p> {{item.quantidade}} {{item.pedido_nome.tipo}} - {{item.descricao}}
                                 {% endfor %}      
 
+                            </td>
+                            <td td style="vertical-align: middle; text-align: justify">
+                                <p> {{pedido.observacao}}
                             </td>
                         </tr>    
                     {% endfor %}

@@ -77,6 +77,7 @@
                         <th onclick="sortTable(0)">Entrega</th>
                         <th onclick="sortTable(0)">Pagamento</th>
                         <th onclick="sortTable(0)">Descrição do pedido</th>
+                        <th onclick="sortTable(0)">Feedback</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -84,12 +85,13 @@
                     {% for pedido in pedidos %}
                         <tr id={{ pedido.id }}>
                             <td> #{{pedido.id}} </td>
-                            <td> {{pedido.get_data_entrega()}} </td>
-                            <td> {{pedido.cliente.name}} </td>
-                            <td> {{pedido.endereco_entrega}}  <p>
+                            <td width="10%"> {{pedido.get_data_entrega()}} </td>
+                            <td width="10%"> {{pedido.cliente.name}} </td>
+
+                            <td width="20%"> {{pedido.endereco_entrega}}  <p>
                                <b>{{pedido.s_entrega.status_entrega}} </b> 
                             </td>
-                            <td> 
+                            <td width="10%"> 
                                 {{pedido.pagamento.tipo_pagamento}} <p>
                                {{pedido.s_pagamento.status_pagamento}}  <p>
                               <b>R$ {{pedido.valor}} </b> 
@@ -100,6 +102,7 @@
                                     #{{item.quantidade}} {{item.pedido_nome.tipo}}#
                                 {% endfor %}      
                             </td>
+                            <td width="20%"> {{pedido.feedback}} </td>
                             <td >
                                 <div class="control buttons" >
                                     <strong> <a class="button {{ color_theme }} is-small is-fullwidth"

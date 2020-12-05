@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import FloatField, PasswordField, StringField
+from wtforms import FloatField, PasswordField, StringField, TextAreaField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.fields.html5 import EmailField
 from wtforms.fields import SelectField
@@ -54,7 +54,7 @@ class FormClientes(BaseForm):
         ],
     )
 
-    observacao = StringField("Observação")
+    observacao = TextAreaField('Observações', render_kw={"rows": 10, "cols": 11})
 
 
 
@@ -93,9 +93,7 @@ class FormBalanceEntrada(BaseForm):
         ],
     )
 
-    observacao = StringField(
-        "Observação"
-    )
+    observacao = TextAreaField('Observações', render_kw={"rows": 10, "cols": 11})
 
     preco = StringField(
         "Preço",
@@ -146,9 +144,7 @@ class FormBalanceSaida(BaseForm):
         ],
     )
 
-    observacao = StringField(
-        "Observação"
-    )
+    observacao = TextAreaField('Observações', render_kw={"rows": 10, "cols": 11})
 
 
     date = StringField(
@@ -239,9 +235,7 @@ class FormProduto(BaseForm):
         ],
     )
 
-    observacao = StringField(
-        "Observação"
-    )
+    observacao = TextAreaField('Observações', render_kw={"rows": 10, "cols": 11})
 
 
     def load(self, produto):
@@ -268,9 +262,17 @@ class FormProduto(BaseForm):
 class FormContas(BaseForm):
     descricao  = StringField("Descrição da Conta", [Required("Informar a descrição da conta")])
     fornecedor = StringField("Fornecedor", [Required("Registrar o fornecedor.")])
-    valor  = StringField("Valor", [Required("Colocar o valor da conta"),
-            Regexp("^[0-9]\d{0,4}(\.\d{5})*,\d{2}$", message="Informe o valor da conta no formato RR,cc ex: 15,20 (Quinze reais e vinte e dois centavos)"),])
+
+    valor = StringField(
+        "Valor",
+        [        
+            Required("Colocar o valor da conta"),
+            Regexp("^[0-9]\d{0,4}(\.\d{3})*,\d{2}$", 
+            message="Informe o valor das parcelas no formato RR,cc ex: 15,20 (Quinze reais e vinte e dois centavos)"),
+        ],
+    )
     
+
     status_pagamento = QuerySelectField(
         "Status do Pagamento",
         validators=[Required("O status do pagamento é obrigatoria!")],
@@ -310,7 +312,7 @@ class FormContas(BaseForm):
 
     data_pagamento = StringField("Data Pagamento")
     data_vencimento  = StringField("Data Vencimento", [Required("Colocar a data de vencimento.")])
-    observacao  = StringField("Observacao")
+    observacao = TextAreaField('Observações', render_kw={"rows": 10, "cols": 11})
 
     def load(self, conta):
         self.process(obj=conta)
@@ -349,7 +351,9 @@ class FormPedido(BaseForm):
             Required("Por favor preencher hora da Produção."),
         ],
     )
-    observacao = StringField("Observações")
+    #observacao = StringField("Observações")
+    observacao = TextAreaField('Observações', render_kw={"rows": 10, "cols": 11})
+    feedback = TextAreaField('FeedBack')
 
     id_cliente = StringField(
         "ID",
@@ -465,7 +469,7 @@ class FormStatusPagamento(BaseForm):
     data_pagamento = StringField(
         "Data Pagamento",
     )
-    observacao =  StringField("Observações")
+    observacao = TextAreaField('Observações', render_kw={"rows": 10, "cols": 11})
 
     valor = StringField(
         "Valor total do pedido",
@@ -535,7 +539,7 @@ class FormStatusEntrega(BaseForm):
         ],
     )
 
-    observacao =  StringField("Observações")
+    observacao = TextAreaField('Observações', render_kw={"rows": 10, "cols": 11})
 
 
     
@@ -569,7 +573,7 @@ class FormContasPagas(BaseForm):
         ],
     )
 
-    observacao =  StringField("Observações")
+    observacao = TextAreaField('Observações', render_kw={"rows": 10, "cols": 11})
 
 
     
@@ -620,7 +624,7 @@ class FormParcelas(BaseForm):
         ],
     )
 
-    observacao =  StringField("Observações")
+    observacao = TextAreaField('Observações', render_kw={"rows": 10, "cols": 11})
 
 
     
