@@ -40,7 +40,6 @@ def tratar_centavos(valor):
         valor_formatado = str('{:.2f}').format(valor)
         valor_formatado = valor_formatado.replace(".", ",")
     else:
-        print(valor)
         valor_formatado = "00,00"
     return valor_formatado
 
@@ -858,18 +857,18 @@ class Pedidos(db.Model):
 
     def get_valor_final(self):
         if self.valor is not None:
-            valor = float(self.valor.replace(",","."))
+            valor = float(self.valor.replace(".","").replace(",","."))
             if self.valor_desconto is not None:
                 try:
-                    valor-=float(self.valor_desconto.replace(",","."))
+                    valor-=float(self.valor_desconto.replace(".","").replace(",","."))
                 except:
                     pass
             if self.valor_entrega is not None:
                 try:
-                    valor-=float(self.valor_entrega.replace(",","."))
+                    valor-=float(self.valor_entrega.replace(".","").replace(",","."))
                 except:
                     pass
-            str(valor).replace(".",",")
+            str(valor).replace(",",".")
         else:
             valor = self.valor
         return tratar_centavos(valor)
@@ -1001,9 +1000,7 @@ class Pedidos(db.Model):
             itens.remove()
 
         if self.s_pagamento.status_pagamento=="Pago":
-            print(self.id)
             financeiro = Financeiro.get_item(self.id, "Pedido")
-            print(financeiro)
             financeiro.remove()
 
 
@@ -1106,7 +1103,6 @@ class Balance(db.Model):
         return response
     
     def remove(self):
-        print("Entrei aqui")
         db.session.delete(self)
         db.session.commit()
         response = {"success": True, "message": "Registro excluido com sucesso!"}
@@ -1213,7 +1209,7 @@ class Financeiro(db.Model):
 
     @staticmethod
     def get_to_table(limit, offset):
-        qry = db.session.query(Financeiro).limit(limit).offset(offset)
+        qry = db.session.query(Financeiro).order_by(Financeiro.data_pagamento.desc()).limit(limit).offset(offset)
         qry = qry.cte('query_get_financeiro')
         
         lista_financeira = []
@@ -1224,21 +1220,31 @@ class Financeiro(db.Model):
         lista_financeira.append(Financeiro.get_total_contas(qry))
         lista_financeira.append(Financeiro.get_saldo(qry))
         lista_financeira.append(Financeiro.get_total_geral(qry))
-        print(lista_financeira)
         return lista_financeira
 
 
     @staticmethod
     def get_total_pedidos_valor(qry):
-        qry_financeiro = db.session.query(func.sum(qry.c.valor).label("total")
-        ).filter(qry.c.tipo_item=="Pedido")
+        qry_2 = db.session.query(qry, 
+        func.replace(func.replace(qry.c.valor, ".",""), ",", ".").label("total"))
+        print(qry_2.all())
+        qry_2 = qry_2.cte('retirado_ponto')
 
+        
+        qry_financeiro = db.session.query(func.sum(qry_2.c.total).label("total")
+        ).filter(qry_2.c.tipo_item=="Pedido")
+        print(qry_financeiro.first()[0])
         return tratar_centavos(qry_financeiro.first()[0])
 
     @staticmethod
     def get_total_contas_valor(qry):
-        qry_financeiro = db.session.query(func.sum(qry.c.valor).label("total")
-        ).filter(qry.c.tipo_item=="Conta")
+        qry_2 = db.session.query(qry, 
+        func.replace(func.replace(qry.c.valor, ".",""), ",", ".").label("total"))
+        qry_2 = qry_2.cte('retirado_ponto')
+
+        
+        qry_financeiro = db.session.query(func.sum(qry_2.c.total).label("total")
+        ).filter(qry_2.c.tipo_item=="Conta")
         
         return tratar_centavos(qry_financeiro.first()[0])
 
@@ -1254,6 +1260,7 @@ class Financeiro(db.Model):
     def get_saldo(qry):
         saida = float(Financeiro.get_total_contas_valor(qry).replace(",","."))
         entrada = float(Financeiro.get_total_pedidos_valor(qry).replace(",","."))
+        
         return tratar_centavos(entrada-saida)
 
     @staticmethod

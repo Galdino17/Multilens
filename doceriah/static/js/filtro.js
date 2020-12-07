@@ -41,8 +41,8 @@ function sortTable(n) {
         verifica_valor = valor_de_x.slice(0,5)
         if (verifica_valor.includes("r$ ",0)){
             
-            valor_de_x = parseFloat(valor_de_x.split("r$ ")[1].replace(",","."))
-            valor_de_y = parseFloat(valor_de_y.split("r$ ")[1].replace(",","."))
+            valor_de_x = parseFloat(valor_de_x.split("r$ ")[1].replace(".","").replace(",","."))
+            valor_de_y = parseFloat(valor_de_y.split("r$ ")[1].replace(".","").replace(",","."))
             
 
         } else if (verifica_valor.includes("/",2)){
@@ -143,10 +143,10 @@ function procurar_fluxo($rows, val){
                 
                 if (text.indexOf(tipo)>0){   
                     count_entrada +=1     
-                    valor_entrada = valor_entrada + parseFloat(valor_em_html.replace(",","."))
+                    valor_entrada = valor_entrada + parseFloat(valor_em_html.replace(".","").replace(",","."))
                 } else {
                     count_saida +=1  
-                    valor_saida = valor_saida + parseFloat(valor_em_html.replace(",","."))
+                    valor_saida = valor_saida + parseFloat(valor_em_html.replace(".","").replace(",","."))
                 }
                 
                 
